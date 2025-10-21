@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FontManager Demo - Shrift Menejeri Namunasi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .demo-section {
+      margin-bottom: 40px;
+      padding: 20px;
+      background: #fafafa;
+      border-radius: 4px;
+    }
+
+    .demo-section h2 {
+      color: #444;
+      margin-top: 0;
+    }
+
+    .status {
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .status.loading {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .text-sample {
+      padding: 15px;
+      margin: 10px 0;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .font-custom1 {
+      font-family: 'CustomFont1', 'Georgia', serif;
+    }
+
+    .font-custom2 {
+      font-family: 'CustomFont2', 'Trebuchet MS', sans-serif;
+    }
+
+    svg {
+      border: 1px solid #ddd;
+      background: white;
+      margin: 10px 0;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .font-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .font-list li {
+      padding: 8px;
+      background: white;
+      margin: 5px 0;
+      border-radius: 4px;
+      border-left: 3px solid #28a745;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .note {
+      background: #e7f3ff;
+      border-left: 4px solid #2196F3;
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .note-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FontManager Demo</h1>
+    <p class="subtitle">Shrift yuklash va SVG matnlarini boshqarish moduli namunasi</p>
+
+    <div class="note">
+      <div class="note-title">📌 Eslatma / Note:</div>
+      <div>Bu demo sistema shriftlaridan foydalanadi. FontManager o'z shriftlaringizni yuklash uchun ishlatiladi.</div>
+      <div>This demo uses system fonts. FontManager is designed to load your custom fonts.</div>
+    </div>
+
+    <!-- Status Section -->
+    <div class="demo-section">
+      <h2>📊 Holat / Status</h2>
+      <div id="status" class="status loading">
+        Shriftlar yuklanmoqda... / Loading fonts...
+      </div>
+      <div>
+        <button id="checkFontsBtn">Shriftlarni Tekshirish / Check Fonts</button>
+        <button id="reloadFontsBtn">Qayta Yuklash / Reload</button>
+      </div>
+    </div>
+
+    <!-- Loaded Fonts Section -->
+    <div class="demo-section">
+      <h2>✅ Yuklangan Shriftlar / Loaded Fonts</h2>
+      <ul id="fontList" class="font-list">
+        <li>Shriftlar yuklanmoqda... / Loading...</li>
+      </ul>
+    </div>
+
+    <!-- HTML Text Demo -->
+    <div class="demo-section">
+      <h2>📝 HTML Matn Namunalari / HTML Text Samples</h2>
+      <div class="text-sample font-custom1">
+        <p><strong>CustomFont1 (Georgia fallback):</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>O'zbek tilida: Bu yerda CustomFont1 shrifti bilan matn ko'rsatilmoqda.</p>
+      </div>
+      <div class="text-sample font-custom2">
+        <p><strong>CustomFont2 (Trebuchet MS fallback):</strong> Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>O'zbek tilida: Bu yerda CustomFont2 shrifti bilan matn ko'rsatilmoqda.</p>
+      </div>
+    </div>
+
+    <!-- SVG Demo Section -->
+    <div class="demo-section">
+      <h2>🎨 SVG Matn Namunalari / SVG Text Samples</h2>
+      <button id="fixSvgBtn">SVG Shriftlarini Tuzatish / Fix SVG Fonts</button>
+      
+      <div>
+        <h3>SVG 1: Oddiy matn / Simple text</h3>
+        <svg id="svg1" width="600" height="100" xmlns="http://www.w3.org/2000/svg">
+          <text x="10" y="30" font-size="24" fill="#333">
+            Bu SVG ichidagi matn - This is text in SVG
+          </text>
+          <text x="10" y="60" font-size="18" fill="#666">
+            CustomFont1 shrifti qo'llanilishi kerak / Should use CustomFont1 font
+          </text>
+        </svg>
+      </div>
+
+      <div>
+        <h3>SVG 2: Turli xil matnlar / Various texts</h3>
+        <svg id="svg2" width="600" height="150" xmlns="http://www.w3.org/2000/svg">
+          <text x="10" y="30" font-family="CustomFont1" font-size="20" fill="#007bff">
+            CustomFont1 shrifti / CustomFont1 font
+          </text>
+          <text x="10" y="60" font-family="CustomFont2" font-size="20" fill="#28a745">
+            CustomFont2 shrifti / CustomFont2 font
+          </text>
+          <text x="10" y="90" font-size="18" fill="#dc3545">
+            Default shrift (FontManager tomonidan o'rnatiladi)
+          </text>
+          <text x="10" y="120" font-size="16" fill="#6c757d">
+            <tspan>Tspan elementi / Tspan element</tspan>
+          </text>
+        </svg>
+      </div>
+
+      <div>
+        <h3>SVG 3: Style bilan / With style</h3>
+        <svg id="svg3" width="600" height="100" xmlns="http://www.w3.org/2000/svg">
+          <style>
+            .svg-text {
+              fill: #333;
+              font-size: 20px;
+            }
+          </style>
+          <text x="10" y="30" class="svg-text">
+            Styled SVG matn / Styled SVG text
+          </text>
+          <text x="10" y="70" class="svg-text" font-style="italic">
+            Italic styled text
+          </text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Console Log Section -->
+    <div class="demo-section">
+      <h2>🔍 Console Log</h2>
+      <p>Browser konsolini oching (F12) va shriftlarning yuklanishini kuzating.</p>
+      <p>Open browser console (F12) to see font loading messages.</p>
+      <div id="consoleOutput" style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 4px; font-family: monospace; max-height: 300px; overflow-y: auto; margin-top: 10px;">
+        <div>Console output will appear here...</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { FontManager } from './FontManager.js';
+
+    // Console output capture
+    const consoleOutput = document.getElementById('consoleOutput');
+    const originalConsoleLog = console.log;
+    const originalConsoleError = console.error;
+
+    function addToConsole(message, type = 'log') {
+      const color = type === 'error' ? '#f48771' : '#4ec9b0';
+      const div = document.createElement('div');
+      div.style.color = color;
+      div.textContent = `${new Date().toLocaleTimeString()} [${type.toUpperCase()}] ${message}`;
+      consoleOutput.appendChild(div);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+
+    console.log = function(...args) {
+      originalConsoleLog.apply(console, args);
+      addToConsole(args.join(' '), 'log');
+    };
+
+    console.error = function(...args) {
+      originalConsoleError.apply(console, args);
+      addToConsole(args.join(' '), 'error');
+    };
+
+    // FontManager obyektini yaratish / Create FontManager instance
+    const fontManager = new FontManager();
+
+    // Shrift definitsiyalarini qo'shish / Add font definitions
+    // Bu yerda sistema shriftlaridan foydalanish (demo uchun)
+    // Using system fonts here (for demo purposes)
+    fontManager.addFontDefinitions([
+      {
+        family: 'CustomFont1',
+        src: "local('Georgia'), local('Times New Roman')",
+        weight: 'normal',
+        style: 'normal',
+        display: 'swap'
+      },
+      {
+        family: 'CustomFont2',
+        src: "local('Trebuchet MS'), local('Arial')",
+        weight: 'normal',
+        style: 'normal',
+        display: 'swap'
+      }
+    ]);
+
+    // Status elementini yangilash / Update status element
+    function updateStatus(message, type = 'loading') {
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = message;
+      statusEl.className = `status ${type}`;
+    }
+
+    // Yuklangan shriftlar ro'yxatini yangilash / Update loaded fonts list
+    function updateFontList() {
+      const fontListEl = document.getElementById('fontList');
+      const loadedFonts = fontManager.getLoadedFonts();
+      
+      if (loadedFonts.length === 0) {
+        fontListEl.innerHTML = '<li>Hech qanday shrift yuklanmagan / No fonts loaded</li>';
+      } else {
+        fontListEl.innerHTML = loadedFonts
+          .map(font => `<li>✓ ${font}</li>`)
+          .join('');
+      }
+    }
+
+    // Sahifa yuklanganda shriftlarni yuklash / Load fonts on page load
+    async function initializeFonts() {
+      try {
+        updateStatus('Shriftlar yuklanmoqda... / Loading fonts...', 'loading');
+        console.log('🚀 FontManager boshlandi / FontManager starting...');
+        
+        await fontManager.loadFonts();
+        
+        updateStatus('✓ Barcha shriftlar muvaffaqiyatli yuklandi! / All fonts loaded successfully!', 'success');
+        updateFontList();
+
+        console.log('🎉 FontManager tayyor / FontManager ready');
+        console.log('Yuklangan shriftlar / Loaded fonts:', fontManager.getLoadedFonts());
+      } catch (error) {
+        updateStatus(`✗ Xatolik / Error: ${error.message}`, 'error');
+        console.error('Shriftlarni yuklashda xatolik:', error);
+      }
+    }
+
+    // SVG shriftlarini tuzatish / Fix SVG fonts
+    function fixAllSVGs() {
+      try {
+        const svgs = document.querySelectorAll('svg');
+        console.log(`SVG elementlarni tuzatish / Fixing ${svgs.length} SVG elements...`);
+        
+        svgs.forEach((svg, index) => {
+          fontManager.fixSVGFonts(svg);
+          console.log(`✓ SVG ${index + 1} tuzatildi / SVG ${index + 1} fixed`);
+        });
+        
+        updateStatus('✓ SVG shriftlari tuzatildi! / SVG fonts fixed!', 'success');
+        console.log('✓ Barcha SVG elementlar tuzatildi / All SVG elements fixed');
+      } catch (error) {
+        updateStatus(`✗ SVG xatolik / SVG Error: ${error.message}`, 'error');
+        console.error('SVG tuzatishda xatolik:', error);
+      }
+    }
+
+    // Shriftlarni tekshirish / Check fonts
+    function checkFonts() {
+      const allLoaded = fontManager.areFontsLoaded();
+      const loadedFonts = fontManager.getLoadedFonts();
+      
+      console.log('═══════════════════════════════════════');
+      console.log('Shrift holati / Font status:');
+      console.log('- Barcha shriftlar yuklandi / All fonts loaded:', allLoaded);
+      console.log('- Yuklangan shriftlar / Loaded fonts:', loadedFonts);
+      console.log('- Jami shriftlar / Total fonts:', loadedFonts.length);
+      
+      // Check specific fonts
+      fontManager.fontDefinitions.forEach(font => {
+        const isLoaded = fontManager.areFontsLoaded(font.family);
+        console.log(`  - ${font.family}: ${isLoaded ? '✓ yuklangan' : '✗ yuklanmagan'}`);
+      });
+      console.log('═══════════════════════════════════════');
+      
+      updateStatus(
+        allLoaded 
+          ? `✓ ${loadedFonts.length} ta shrift yuklandi / ${loadedFonts.length} fonts loaded`
+          : '⚠ Ba\'zi shriftlar yuklanmadi / Some fonts not loaded',
+        allLoaded ? 'success' : 'error'
+      );
+    }
+
+    // Event listeners
+    document.getElementById('checkFontsBtn').addEventListener('click', checkFonts);
+    document.getElementById('reloadFontsBtn').addEventListener('click', () => {
+      location.reload();
+    });
+    document.getElementById('fixSvgBtn').addEventListener('click', fixAllSVGs);
+
+    // Initializatsiya / Initialize
+    console.log('═══════════════════════════════════════');
+    console.log('FontManager Demo ishga tushdi / FontManager Demo started');
+    console.log('═══════════════════════════════════════');
+    initializeFonts();
+  </script>
+</body>
+</html>

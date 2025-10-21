@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FontManager Simple Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 { color: #333; }
+    h2 { color: #444; margin-top: 30px; }
+    
+    .status {
+      padding: 10px;
+      border-radius: 4px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .demo-box {
+      background: #fafafa;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    svg {
+      border: 1px solid #ddd;
+      background: white;
+      margin: 10px 0;
+    }
+
+    #consoleLog {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin: 15px 0;
+    }
+
+    .log-line {
+      margin: 2px 0;
+    }
+
+    .log-success { color: #4ec9b0; }
+    .log-error { color: #f48771; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 FontManager Simple Demo</h1>
+    <p>Oddiy FontManager demonstratsiyasi / Simple FontManager demonstration</p>
+
+    <div class="demo-box">
+      <h2>📊 Status / Holat</h2>
+      <div id="status" class="status">Yuklanmoqda... / Loading...</div>
+      <button id="loadFontsBtn">Shriftlarni Yuklash / Load Fonts</button>
+      <button id="checkFontsBtn">Tekshirish / Check</button>
+      <button id="clearBtn">Tozalash / Clear</button>
+    </div>
+
+    <div class="demo-box">
+      <h2>📝 SVG Matn / SVG Text</h2>
+      <button id="fixSvgBtn">SVG ni Tuzatish / Fix SVG</button>
+      <svg id="testSvg" width="500" height="100" xmlns="http://www.w3.org/2000/svg">
+        <text x="10" y="30" font-size="20" fill="#333">
+          Bu SVG ichidagi matn / This is text in SVG
+        </text>
+        <text x="10" y="60" font-size="16" fill="#666">
+          FontManager bu matnni tuzatadi / FontManager will fix this text
+        </text>
+      </svg>
+    </div>
+
+    <div class="demo-box">
+      <h2>🔍 Console Output</h2>
+      <div id="consoleLog">
+        <div class="log-line">Console ready...</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { FontManager } from './FontManager.js';
+
+    // Console logging
+    const consoleLog = document.getElementById('consoleLog');
+    
+    function log(message, type = 'log') {
+      const time = new Date().toLocaleTimeString();
+      const div = document.createElement('div');
+      div.className = `log-line log-${type === 'error' ? 'error' : 'success'}`;
+      div.textContent = `[${time}] ${message}`;
+      consoleLog.appendChild(div);
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+      
+      if (type === 'error') {
+        console.error(message);
+      } else {
+        console.log(message);
+      }
+    }
+
+    // Status update
+    function setStatus(message, isSuccess = true) {
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = message;
+      statusEl.className = `status ${isSuccess ? 'success' : 'error'}`;
+    }
+
+    // Create FontManager
+    const fontManager = new FontManager();
+    log('✓ FontManager yaratildi / FontManager created');
+
+    // Test without actual font loading (since external resources are blocked)
+    function demonstrateFunctionality() {
+      log('═══ Demonstratsiya / Demonstration ═══');
+      
+      // 1. Check initial state
+      log(`Boshlang'ich holat / Initial state:`);
+      log(`  - areFontsLoaded(): ${fontManager.areFontsLoaded()}`);
+      log(`  - getLoadedFonts(): [${fontManager.getLoadedFonts().join(', ')}]`);
+      
+      // 2. Add font definitions
+      log('Shrift definitsiyalarini qo\'shish / Adding font definitions...');
+      try {
+        fontManager.addFontDefinitions([
+          {
+            family: 'TestFont',
+            src: "local('Arial')",
+            weight: 'normal',
+            style: 'normal'
+          }
+        ]);
+        log('✓ Shrift definitsiyalari qo\'shildi / Font definitions added');
+        log(`  - fontDefinitions.length: ${fontManager.fontDefinitions.length}`);
+      } catch (error) {
+        log(`✗ Xatolik / Error: ${error.message}`, 'error');
+      }
+      
+      // 3. Generate CSS
+      log('CSS generatsiya qilish / Generating CSS...');
+      const css = fontManager.generateFontFaceCSS();
+      log(`✓ CSS generatsiya qilindi / CSS generated`);
+      log(`  - CSS uzunligi / CSS length: ${css.length} characters`);
+      
+      // 4. Simulate font loaded
+      log('Shrift yuklangan deb belgilash / Simulating font loaded...');
+      fontManager.loadedFonts.add('TestFont');
+      log(`✓ Shrift yuklangan / Font marked as loaded`);
+      log(`  - areFontsLoaded('TestFont'): ${fontManager.areFontsLoaded('TestFont')}`);
+      log(`  - getLoadedFonts(): [${fontManager.getLoadedFonts().join(', ')}]`);
+      
+      setStatus('✓ Barcha metodlar ishlayapti / All methods working', true);
+      log('═══ Demonstratsiya tugadi / Demonstration complete ═══');
+    }
+
+    // Fix SVG
+    function fixSvg() {
+      log('SVG ni tuzatish / Fixing SVG...');
+      try {
+        const svg = document.getElementById('testSvg');
+        fontManager.fixSVGFonts(svg);
+        log('✓ SVG tuzatildi / SVG fixed');
+        setStatus('✓ SVG tuzatildi / SVG fixed', true);
+      } catch (error) {
+        log(`✗ SVG xatolik / SVG error: ${error.message}`, 'error');
+        setStatus(`✗ Xatolik / Error: ${error.message}`, false);
+      }
+    }
+
+    // Check fonts
+    function checkFonts() {
+      log('Shriftlarni tekshirish / Checking fonts...');
+      const allLoaded = fontManager.areFontsLoaded();
+      const loadedFonts = fontManager.getLoadedFonts();
+      
+      log(`  - Barcha yuklangan / All loaded: ${allLoaded}`);
+      log(`  - Yuklangan shriftlar / Loaded fonts: [${loadedFonts.join(', ')}]`);
+      log(`  - Jami / Total: ${loadedFonts.length}`);
+      
+      setStatus(
+        loadedFonts.length > 0
+          ? `✓ ${loadedFonts.length} shrift yuklangan / ${loadedFonts.length} fonts loaded`
+          : '⚠ Shriftlar yuklanmagan / No fonts loaded',
+        loadedFonts.length > 0
+      );
+    }
+
+    // Clear
+    function clear() {
+      log('Tozalash / Clearing...');
+      fontManager.clear();
+      setStatus('✓ Tozalandi / Cleared', true);
+    }
+
+    // Event listeners
+    document.getElementById('loadFontsBtn').addEventListener('click', demonstrateFunctionality);
+    document.getElementById('checkFontsBtn').addEventListener('click', checkFonts);
+    document.getElementById('fixSvgBtn').addEventListener('click', fixSvg);
+    document.getElementById('clearBtn').addEventListener('click', clear);
+
+    // Auto start
+    log('FontManager Simple Demo tayyor / FontManager Simple Demo ready');
+    setStatus('✓ Tayyor / Ready - "Shriftlarni Yuklash" tugmasini bosing', true);
+  </script>
+</body>
+</html>
