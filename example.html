@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FontManager - Custom Fonts Example</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .code-block .keyword { color: #569cd6; }
+    .code-block .string { color: #ce9178; }
+    .code-block .comment { color: #6a9955; }
+    .code-block .function { color: #dcdcaa; }
+
+    .example-section {
+      margin: 30px 0;
+    }
+
+    .example-title {
+      color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .font-sample {
+      padding: 20px;
+      margin: 15px 0;
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      border-radius: 4px;
+    }
+
+    .font-sample h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    .status-badge.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-badge.info {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .svg-example {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      background: white;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #5568d3;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .info-box {
+      background: #e7f3ff;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .info-box strong {
+      color: #2196F3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>🎨 FontManager</h1>
+      <p class="subtitle">Custom Fonts Example - O'z shriftlaringiz bilan ishlash namunasi</p>
+
+      <div class="info-box">
+        <strong>📝 Eslatma:</strong> Bu sahifada FontManager moduli qanday ishlashini ko'rsatish uchun 
+        oddiy misol keltirilgan. Real loyihada o'z shrift fayllaringizni qo'shing.
+      </div>
+
+      <!-- Code Example -->
+      <div class="example-section">
+        <h2 class="example-title">1️⃣ FontManager Initialization</h2>
+        <div class="code-block">
+<span class="keyword">import</span> { <span class="function">FontManager</span> } <span class="keyword">from</span> <span class="string">'./FontManager.js'</span>;
+
+<span class="comment">// FontManager obyektini yaratish</span>
+<span class="keyword">const</span> fontManager = <span class="keyword">new</span> <span class="function">FontManager</span>();
+
+<span class="comment">// Shrift definitsiyalarini qo'shish</span>
+fontManager.<span class="function">addFontDefinitions</span>([
+  {
+    family: <span class="string">'MyCustomFont'</span>,
+    src: <span class="string">"url('/fonts/custom-font.woff2') format('woff2')"</span>,
+    weight: <span class="string">'normal'</span>,
+    style: <span class="string">'normal'</span>,
+    display: <span class="string">'swap'</span>
+  }
+]);
+
+<span class="comment">// Shriftlarni yuklash</span>
+<span class="keyword">await</span> fontManager.<span class="function">loadFonts</span>();
+        </div>
+      </div>
+
+      <!-- SVG Example -->
+      <div class="example-section">
+        <h2 class="example-title">2️⃣ SVG Text Example</h2>
+        <div class="svg-example">
+          <svg id="exampleSvg" width="100%" height="150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <text x="20" y="40" font-size="28" fill="url(#grad1)" font-weight="bold">
+              FontManager SVG Example
+            </text>
+            <text x="20" y="70" font-size="18" fill="#666">
+              Bu SVG ichidagi matn - This is text inside SVG
+            </text>
+            <text x="20" y="100" font-size="16" fill="#999">
+              FontManager bu matnlarni avtomatik tuzatadi
+            </text>
+            <text x="20" y="125" font-size="14" fill="#aaa">
+              Automatic font management for SVG text elements
+            </text>
+          </svg>
+        </div>
+        <button id="fixSvgBtn">🔧 SVG ni Tuzatish / Fix SVG</button>
+      </div>
+
+      <!-- Font Samples -->
+      <div class="example-section">
+        <h2 class="example-title">3️⃣ Font Examples</h2>
+        
+        <div class="font-sample" style="font-family: Arial, sans-serif;">
+          <h3>Arial (System Font)</h3>
+          <p style="font-size: 18px;">
+            The quick brown fox jumps over the lazy dog.<br>
+            O'zbek tilida: Shrift boshqaruv moduli.
+          </p>
+        </div>
+
+        <div class="font-sample" style="font-family: Georgia, serif;">
+          <h3>Georgia (System Font)</h3>
+          <p style="font-size: 18px;">
+            The quick brown fox jumps over the lazy dog.<br>
+            O'zbek tilida: Shrift boshqaruv moduli.
+          </p>
+        </div>
+
+        <div class="font-sample" style="font-family: 'Courier New', monospace;">
+          <h3>Courier New (Monospace)</h3>
+          <p style="font-size: 18px;">
+            The quick brown fox jumps over the lazy dog.<br>
+            O'zbek tilida: Shrift boshqaruv moduli.
+          </p>
+        </div>
+      </div>
+
+      <!-- API Methods -->
+      <div class="example-section">
+        <h2 class="example-title">4️⃣ API Methods</h2>
+        <div>
+          <button id="checkBtn">✓ Shriftlarni Tekshirish</button>
+          <button id="infoBtn">ℹ️ Ma'lumot</button>
+          <button id="clearBtn">🗑️ Tozalash</button>
+        </div>
+        <div id="statusArea" style="margin-top: 15px;"></div>
+      </div>
+
+      <!-- Integration Guide -->
+      <div class="example-section">
+        <h2 class="example-title">5️⃣ O'z loyihangizga qo'shish / Add to Your Project</h2>
+        <div class="code-block">
+<span class="comment">// 1. FontManager.js faylini import qiling</span>
+<span class="keyword">import</span> { <span class="function">FontManager</span> } <span class="keyword">from</span> <span class="string">'./FontManager.js'</span>;
+
+<span class="comment">// 2. Obyekt yarating</span>
+<span class="keyword">const</span> fm = <span class="keyword">new</span> <span class="function">FontManager</span>();
+
+<span class="comment">// 3. Shriftlarni qo'shing</span>
+fm.<span class="function">addFontDefinitions</span>([{
+  family: <span class="string">'YourFont'</span>,
+  src: <span class="string">"url('path/to/font.woff2') format('woff2')"</span>
+}]);
+
+<span class="comment">// 4. Yuklang</span>
+<span class="keyword">await</span> fm.<span class="function">loadFonts</span>();
+
+<span class="comment">// 5. SVG larni tuzating</span>
+<span class="keyword">document</span>.<span class="function">querySelectorAll</span>(<span class="string">'svg'</span>).<span class="function">forEach</span>(svg => {
+  fm.<span class="function">fixSVGFonts</span>(svg);
+});
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Ko'proq Ma'lumot / More Information</h2>
+      <p>To'liq hujjatlar uchun <code>README.md</code> va <code>INTEGRATION_GUIDE.md</code> fayllarini o'qing.</p>
+      <p style="margin-top: 10px;">
+        <span class="status-badge info">GitHub Repo</span>
+        <span class="status-badge info">Documentation</span>
+        <span class="status-badge success">9/9 Tests Passed ✓</span>
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { FontManager } from './FontManager.js';
+
+    // FontManager instance
+    const fontManager = new FontManager();
+    const statusArea = document.getElementById('statusArea');
+
+    // Initialize
+    console.log('🚀 FontManager Custom Example Started');
+
+    // Add demo fonts (using system fonts for demonstration)
+    fontManager.addFontDefinitions([
+      {
+        family: 'DemoFont1',
+        src: "local('Arial')",
+        weight: 'normal',
+        style: 'normal'
+      },
+      {
+        family: 'DemoFont2',
+        src: "local('Georgia')",
+        weight: 'normal',
+        style: 'normal'
+      }
+    ]);
+
+    // Show status
+    function showStatus(message, type = 'info') {
+      const badge = document.createElement('div');
+      badge.className = `status-badge ${type}`;
+      badge.textContent = message;
+      statusArea.appendChild(badge);
+      
+      setTimeout(() => {
+        badge.style.opacity = '0';
+        setTimeout(() => badge.remove(), 300);
+      }, 3000);
+    }
+
+    // Fix SVG button
+    document.getElementById('fixSvgBtn').addEventListener('click', () => {
+      const svg = document.getElementById('exampleSvg');
+      fontManager.fixSVGFonts(svg);
+      showStatus('✓ SVG tuzatildi / SVG fixed', 'success');
+      console.log('SVG fixed');
+    });
+
+    // Check fonts button
+    document.getElementById('checkBtn').addEventListener('click', () => {
+      const loaded = fontManager.getLoadedFonts();
+      const allLoaded = fontManager.areFontsLoaded();
+      
+      showStatus(
+        `Yuklangan: ${loaded.length} shrift / ${loaded.length} fonts loaded`,
+        allLoaded ? 'success' : 'info'
+      );
+      
+      console.log('Loaded fonts:', loaded);
+      console.log('All loaded:', allLoaded);
+    });
+
+    // Info button
+    document.getElementById('infoBtn').addEventListener('click', () => {
+      const info = `
+FontManager Info:
+- Loaded fonts: ${fontManager.getLoadedFonts().length}
+- Font definitions: ${fontManager.fontDefinitions.length}
+- All loaded: ${fontManager.areFontsLoaded()}
+      `.trim();
+      
+      alert(info);
+    });
+
+    // Clear button
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      fontManager.clear();
+      showStatus('🗑️ Tozalandi / Cleared', 'info');
+      console.log('FontManager cleared');
+    });
+
+    // Auto-fix SVG on load
+    setTimeout(() => {
+      const svg = document.getElementById('exampleSvg');
+      fontManager.fixSVGFonts(svg);
+      console.log('✓ SVG auto-fixed on load');
+    }, 500);
+  </script>
+</body>
+</html>
